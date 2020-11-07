@@ -1,0 +1,14 @@
+# centos 
+ssh centos@xx.xxx.xx.xx
+
+# cd 
+cd /opt
+
+# restart 
+sudo systemctl restart uwsgi
+
+# postgres
+sudo su - postgres
+
+# restore
+psql dbname < dumpfile
