@@ -12,3 +12,5 @@ sudo su - postgres
 
 # restore
 psql dbname < dumpfile
+
+Ref: https://www.rubytreesoftware.com/resources/basic-postgresql-backup-and-restore/
