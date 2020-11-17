@@ -11,6 +11,8 @@ sudo systemctl restart uwsgi
 sudo su - postgres
 
 # restore
-psql dbname < dumpfile
+psql -U postgres -h localhost -f db.sql -d dbname
 
-Ref: https://www.rubytreesoftware.com/resources/basic-postgresql-backup-and-restore/
+# fixtures 
+python manage.py dumpdata app.model_name --indent 4 > fixtures/file_name.json
+python manage.py loaddata fixtures/model_name.json --app app.model_name
