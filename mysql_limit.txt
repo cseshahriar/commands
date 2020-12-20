@@ -1,0 +1,10 @@
+\phpmyadmin\libraries\config.default.php
+-------------------------------------------------------------------------
+$cfg['ExecTimeLimit'] = 300; to $cfg['ExecTimeLimit'] = 0;
+-----------------------------------------------------------------------------------------------
+max_execution_time = 3000000 
+max_input_time = 60000000000000
+memory_limit = 1280000000000000000000M
+post_max_size = 4096456M
+upload_max_filesize = 40964564M
+max_file_uploads = 200
