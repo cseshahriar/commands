@@ -1,6 +1,8 @@
-\phpmyadmin\libraries\config.default.php
+/usr/share/phpmyadmin/libraries/config.default.php
 -------------------------------------------------------------------------
-$cfg['ExecTimeLimit'] = 300; to $cfg['ExecTimeLimit'] = 0;
+$cfg['ExecTimeLimit'] = 300; 
+to 
+$cfg['ExecTimeLimit'] = 0;
 -----------------------------------------------------------------------------------------------
 max_execution_time = 3000000 
 max_input_time = 60000000000000
