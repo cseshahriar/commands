@@ -1,0 +1,64 @@
+Step By Step Guide to Install Odoo10 with pycharm:
+Open the terminal and execute below commands step-by-step:
+1- Update apt source list:
+ sudo apt-get update
+
+2- Install Updates:
+ sudo apt-get upgrade
+
+3- install python 2.7:
+ sudo apt install python2.7 python-pip
+
+4- Install git:
+ sudo apt-get install git
+
+5- Install the postgres
+ sudo apt-get install postgresql
+
+6- Login to postgres
+ sudo su postgres
+
+7- Create user odoo in postgres
+ createuser --createdb --username postgres --no-createrole --pwprompt odoo
+
+8- Install Less css via node js and npm
+ - sudo apt-get install curl
+ - sudo apt-get install npm
+ - sudo curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
+ - sudo apt install -y nodejs
+ - sudo npm install -g less less-plugin-clean-css
+
+9- Install wkhtml and place on correct place for Odoo
+ - sudo wget https://builds.wkhtmltopdf.org/0.12.1...
+ - sudo dpkg -i wkhtmltox_0.12.1.3-1~bionic_amd64.deb
+ - sudo apt-get install -f
+ - sudo ln -s /usr/local/bin/wkhtmltopdf /usr/bin
+ - sudo ln -s /usr/local/bin/wkhtmltoimage /usr/bin
+
+10- Install pycharm community:
+ sudo snap install pycharm-community --classic
+
+11- Get odoo 10 source code
+ https://github.com/odoo/odoo/tree/10.0
+
+12- Install Python dependencies
+
+ - sudo pip install -r requirements.txt
+ - sudo pip install simplejson passlib psutil python-social-auth requests reportlab unittest2 psycopg2 python-dateutil pyyaml docutils 
+ - sudo pip install psycopg2-binary Python-Chart Werkzeug
+ - sudo apt-get install python-lxml
+ - pip install Jinja2 mock
+ - sudo apt-get install python-pip libyaml-dev
+
+-13 Create a file named 'odoo-server.conf'
+
+[options]
+; This is the password that allows database operations:
+; admin_passwd = admin
+db_host = localhost
+db_name = False
+db_port = 5432
+db_user = odoo
+db_password = odoo
+xmlrpc_port = 8069
+addons_path =
