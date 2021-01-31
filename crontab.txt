@@ -30,3 +30,5 @@ sudo /etc/init.d/cron start
 sudo /etc/init.d/cron stop
 sudo /etc/init.d/cron restart
 
+https://www.linode.com/docs/guides/how-to-back-up-your-postgresql-database/
+https://mahmudfahmi.wordpress.com/2011/04/03/automated-postgres-database-backup-on-centos/
