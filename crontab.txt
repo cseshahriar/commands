@@ -1,0 +1,32 @@
+apt-get install cron
+systemctl status cron
+nano /etc/crontab
+
+Syntax:
+* * * * * /path/to/command arg1 arg2
+or
+* * * * * /root/backup.sh
+
+In the syntax first * stand for representing minutes [0-59]. 
+Second * stands for representing hour[0-23]. 
+Third * stand for representing day [0-31]. 
+Fourth star stands for representing month[0-12]. 
+Fifth * stand for representing day of the week[0-7]. 
+
+After all step for installation of cron tab and understanding common syntax, let’s execute a cron tab with suitable example.
+
+/script_path/script.sh
+chmod a+x script.sh
+
+crontab -l
+crontab -e
+10 12 * * * /bin/sh /script_path/script.sh
+
+
+# If you wanted the task to run every day at 5:01am, you would use:
+01 3 * * * root script.sh
+
+sudo /etc/init.d/cron start
+sudo /etc/init.d/cron stop
+sudo /etc/init.d/cron restart
+
