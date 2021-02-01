@@ -1,0 +1,25 @@
+http://www.django.co.zw/en/tutorials/setting-django-s-static-and-media-urls/
+https://medium.com/@brianmayrose/django-step-3-43812add68f3
+
+# Static
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_URL = '/static/'
+
+python manage.py collectstatic
+
+python manage.py runserver
+
+# Media Folder Settings
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
+# firstapp
+urls.py
+from django.contrib import admin
+from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
+urlpatterns = [
+    path('', include('pages.urls')),
+    path('admin/', admin.site.urls),
+  ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
