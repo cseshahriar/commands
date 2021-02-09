@@ -1,0 +1,236 @@
+## Step 1 :
+  
+  pip install django-mptt
+  
+## 1.2 Add to settings
+  
+  INSTALLED_APPS = (
+    'django.contrib.auth',
+    # ...
+    'mptt',
+  )
+
+# 2. Configure models
+
+  from django.conf import settings
+  from django.db import models
+  from django.urls import reverse
+  from django.utils.text import slugify
+  from mptt.models import MPTTModel, TreeForeignKey
+
+  class Category(MPTTModel):
+    name = models.CharField(max_length=settings.BLOG_TITLE_MAX_LENGTH, unique=True)
+    parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
+    slug = models.SlugField(max_length=settings.BLOG_TITLE_MAX_LENGTH, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+
+    class MPTTMeta:
+      order_insertion_by = ['name']
+
+    class Meta:
+      verbose_name_plural = 'Categories'
+
+    def __str__(self):
+      return self.name
+
+    def save(self, *args, **kwargs):
+      value = self.title
+      if not self.slug:
+        self.slug = slugify(value, allow_unicode=True)
+      super().save(*args, **kwargs)
+
+    def get_absolute_url(self):
+      return reverse('items-by-category', args=[str(self.slug)])
+
+
+  class Item(models.Model):
+      title = models.CharField(max_length=settings.BLOG_TITLE_MAX_LENGTH)
+      category = TreeForeignKey('Category', on_delete=models.CASCADE, null=True, blank=True)
+      slug = models.SlugField(
+        max_length=settings.BLOG_TITLE_MAX_LENGTH,
+      )
+
+      def __str__(self):
+        return self.title
+
+      def get_absolute_url(self):
+        kwargs = {
+          'slug': self.slug
+        }
+        return reverse('item-detail', kwargs=kwargs)
+
+      def save(self, *args, **kwargs):
+        if not self.slug:
+          value = self.title
+          self.slug = slugify(value, allow_unicode=True)
+        super().save(*args, **kwargs)
+
+# 3. Create Category Tree
+
+    root1 = Category.objects.create(name="Root Category One")
+    first1 = Category.objects.create(name="Root One First Level Category One", parent=root1)
+    
+    from django.contrib import admin
+    from .models import Category
+    from mptt.admin import DraggableMPTTAdmin
+
+    class CategoryAdmin(DraggableMPTTAdmin):
+        pass
+
+    admin.site.register(Category, CategoryAdmin )
+    admin.site.register(Item)
+
+# 4. Handle requests
+
+  from django.urls import path
+  from games.views import ItemsByCategoryView, CategoryListView
+
+  urlpatterns = [
+    // ...
+      path('', CategoryListView.as_view() , name='category-list'),
+      path('<str:slug>/', ItemsByCategoryView.as_view() , name='category-detail'),
+      ]
+      
+  and their associated views in views.py:
+      
+  from django.views import generic
+  from .models import Item, Category
+
+
+  class CategoryListView(generic.ListView):
+      model = Category
+      template_name = "items/category_list.html"
+
+  class ItemsByCategoryView(generic.ListView):
+      ordering = 'id'
+      paginate_by = 10
+      template_name = 'items/items_by_category.html'
+
+      def get_queryset(self):
+          # https://docs.djangoproject.com/en/3.1/topics/class-based-views/generic-display/#dynamic-filtering
+          # the following category will also be added to the context data
+          self.category = Category.objects.get(slug=self.kwargs['slug'])
+          queryset = Item.objects.filter(category=self.category)
+           # need to set ordering to get consistent pagination results
+          queryset = queryset.order_by(self.ordering)
+          return queryset
+
+      def get_context_data(self, **kwargs):
+          context = super().get_context_data(**kwargs)
+          context['category'] = self.category
+          return context
+    
+5. Show categories
+    
+    {% extends "blog/base.html" %} 
+    {% load mptt_tags %}
+
+    {% block title %}List of categories{% endblock %}
+
+    {% block content %}
+
+    <div>
+        <div>
+      <ul>
+      {% recursetree object_list %}
+          <li>
+        <a href="{{node.get_absolute_url}}">{{node.name}}</a>
+        {% if not node.is_leaf_node %}
+                    <ul class="children">
+                        {{ children }}
+                    </ul>
+        {% endif %}
+          </li>
+      {% endrecursetree %}
+      </ul>
+        </div>
+    </div>
+    {% endblock %}
+    
+    
+    And for item list by category, items/items_by_category.html:
+
+    {% extends "blog/base.html" %}
+
+    {% block title %}{{category.name}} list of items{% endblock %}
+
+    {% block content %}
+    <main>
+        <section>
+      <div class="container">
+          <h1>{{category}} items</h1>
+          <p>{{category.description}}.</p>
+      </div>
+        </section>
+
+      <div>
+        {% for item in object_list%}
+        <div>
+            <a href="{{item.get_absolute_url}}">
+            <p>{{item}}</p>
+            </a>
+        </div>
+        {% endfor %}
+
+      {% if is_paginated %}
+      <div class="pagination">
+        <span class="step-links">
+          {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+          {% endif %}
+
+          <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+          </span>
+
+          {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+          {% endif %}
+        </span>
+      </div>
+      {% endif %}
+
+        </div>
+    </main>
+    {% endblock %}
+    and a base.html
+
+    <!DOCTYPE html>
+    <html>
+        <head>
+      <title>{% block title %}{% endblock %}</title>
+        </head>
+        <body>
+      <div class="container">
+            {% block content %}{% endblock %}
+      </div>
+        </body>
+    </html>
+
+    6. Add breadcrumbs
+    Breadcrumbs are useful to help users to know which level of the website structure they are on. we can include the following partial template as _breadcrumbs.html:
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/">🏠</a></li>
+      {% for node in ancestors %}
+      <li class="breadcrumb-item"><a href="{{node.get_absolute_url}}">{{node.name}}</a></li>
+          {% endfor %}
+      <li class="breadcrumb-item active" aria-current="page">{{ object }}</li>
+        </ol>
+    </nav>
+    And calling it from other templates with the usage of the include4 tag, providing the following variables:
+
+    ancestors: the category tree
+    object: the current node
+    So in any template:
+
+    //...
+    {% include "blog/_breadcrumbs.html" with ancestors=object.category.get_ancestors object=object%}
+    Repo
+    The above code is available as a repo in Github: https://github.com/marcanuy/django-categories-example-app
+
+References: https://simpleit.rocks/python/django/categories-with-django-cbv/
+
