@@ -1,7 +1,7 @@
 # Development Environment Setup with Ubuntu 20.4
 
 ## Vscode Install
-  
+  <pre>
   https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64 
   Extensions: Python, Tabnine Autocomplete AI, Djaneiro,Pylance,Pylint, Material Icon Theme, Fira code, Code Spell Checker, Django, Git History
               PyCharm's Darcula Theme, VSCode Great Icons, Bracket Pair Colorizer 2 (CoenraadS) 
@@ -26,26 +26,27 @@
         "--load-plugins",
         "pylint_django"
     ]
+    </pre>
   
 ## Python 
-
+<pre>
   sudo apt install python3-pip
   sudo apt-get install python3-venv
   python -m pip install --upgrade pip
   pip install autopep8
   pip install pylint
   pip install pylint
-  
+  </pre>
 ## Nodejs
-  
+  <pre>
   Installing Node.js via package manager
   # Using Ubuntu
   sudo apt install curl
   curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash -
   sudo apt-get install -y nodejs
-
+</pre>
 ## Apache
-  
+  <pre>
   sudo apt-get install apache2
   sudo apt-get install php libapache2-mod-php
   sudo apt-get install vim
@@ -70,7 +71,7 @@
   16 export APACHE_RUN_USER=shosen
   17 export APACHE_RUN_GROUP=shosen
   
-    
+    </pre>
 # Feferences 
 https://djangocentral.com/visual-studio-code-setup-for-django-developers/
 https://medium.com/dev-genius/best-visual-studio-code-extensions-for-python-django-af2fdbf7198a
