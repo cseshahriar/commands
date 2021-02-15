@@ -88,16 +88,66 @@
   
   sudo mysql
   ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '123456';
-  \q
+  exit
    
   </pre>
- 
-  
 
+## Git
+
+	sudo apt-get install git
+
+	
+## Postgresql 
+	sudo apt update
+	sudo apt -y upgrade
+	sudo apt install postgresql postgresql-client
+	
+	sudo systemctl stop postgresql.service
+	sudo systemctl start postgresql.service
+	sudo systemctl enable postgresql.service
+	or
+	
+	sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+	wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+	sudo apt-get update
+	sudo apt-get -y install postgresql
+	
+	sudo passwd postgres
+	ttttttt123#
+	
+	sudo su -l postgres
+	psql
+	psql -c "alter user postgres with password 'my00pass'"
+	
+	alter user dbuser with password 'tpl123'
+	
+	createuser dbusersam
+	createdb samdb -O dbusersam
+	psql samdb
+	
+	sudo nano /etc/postgresql/12/main/postgresql.conf
+	#listen_addresses= ‘+’ // remote access
+	
+	sudo service postgresql restart
+	
+	# Pgadmin: Install the public key for the repository (if not done previously):
+	curl https://www.pgadmin.org/static/packages_pgadmin_org.pub | sudo apt-key add
+	
+	# Create the repository configuration file:
+	sudo sh -c 'echo "deb https://ftp.postgresql.org/pub/pgadmin/pgadmin4/apt/$(lsb_release -cs) pgadmin4 main" > /etc/apt/sources.list.d/pgadmin4.list && apt 	   update'
+	
+	# Install for both desktop and web modes:
+	sudo apt install pgadmin4
+	
+	# Install for desktop mode only:
+	sudo apt install pgadmin4-desktop
+	
 # Feferences 
 https://djangocentral.com/visual-studio-code-setup-for-django-developers/
 https://medium.com/dev-genius/best-visual-studio-code-extensions-for-python-django-af2fdbf7198a
 https://github.com/nodesource/distributions/blob/master/README.md#deb
 https://ubuntu.com/server/docs/web-servers-apache
+https://linuxhint.com/postgresql_installation_guide_ubuntu_20-04/
+https://www.pgadmin.org/download/pgadmin-4-apt/
   
   
