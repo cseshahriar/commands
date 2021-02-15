@@ -37,6 +37,7 @@
   pip install pylint
   pip install pylint
   </pre>
+  
 ## Nodejs
   <pre>
   Installing Node.js via package manager
@@ -45,6 +46,7 @@
   curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash -
   sudo apt-get install -y nodejs
 </pre>
+
 ## Apache
   <pre>
   sudo apt-get install apache2
@@ -67,11 +69,31 @@
 
   ls -la
   sudo chown pcusrname:pcusername -R ./
+  
   sudo gedit /etc/apache2/envvars
   16 export APACHE_RUN_USER=shosen
   17 export APACHE_RUN_GROUP=shosen
   
-    </pre>
+  sudo service apache2 restart
+  
+  sudo apt-get install mysql-server
+  sudo service mysql status
+  sudo apt-get install phpmyadmin
+  
+  configuring phpmyadmin
+  apache2 - *(spacebar)
+  ok
+  yes
+  password: shosen123#
+  
+  sudo mysql
+  ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '123456';
+  \q
+   
+  </pre>
+ 
+  
+
 # Feferences 
 https://djangocentral.com/visual-studio-code-setup-for-django-developers/
 https://medium.com/dev-genius/best-visual-studio-code-extensions-for-python-django-af2fdbf7198a
