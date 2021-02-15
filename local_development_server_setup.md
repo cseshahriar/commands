@@ -30,12 +30,21 @@
   
 ## Python 
 <pre>
-  sudo apt install python3-pip
+  # pyhon2
+  sudo apt-get update
+  sudo apt-get install python-pip python-dev libpq-dev postgresql postgresql-contrib
+
+  #python3
+  sudo apt-get update
+  sudo apt-get install python3-pip python3-dev libpq-dev postgresql postgresql-contrib
   sudo apt-get install python3-venv
   python -m pip install --upgrade pip
   pip install autopep8
   pip install pylint
   pip install pylint
+  
+  pip install psycopg2-binary or pip install psycopg2
+  sudo apt-get install libpq-dev
   </pre>
   
 ## Nodejs
@@ -149,5 +158,6 @@ https://github.com/nodesource/distributions/blob/master/README.md#deb
 https://ubuntu.com/server/docs/web-servers-apache
 https://linuxhint.com/postgresql_installation_guide_ubuntu_20-04/
 https://www.pgadmin.org/download/pgadmin-4-apt/
+https://www.digitalocean.com/community/tutorials/how-to-use-postgresql-with-your-django-application-on-ubuntu-14-04
   
   
