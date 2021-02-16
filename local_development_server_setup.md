@@ -42,7 +42,7 @@
   pip install autopep8
   pip install pylint
   pip install pylint
-  
+  sudo apt install flake8
   pip install psycopg2-binary or pip install psycopg2
   sudo apt-get install libpq-dev
   </pre>
