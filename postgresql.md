@@ -1,6 +1,10 @@
 # Postgresql
 
-<pre> sudo -u postgres psql / sudo su - postgres </pre>
+<pre>sudo -u postgres psql / sudo su - postgres</pre>
+
+# Restart: 
+  
+<pre>sudo systemctl restart postgresql</pre>
 
 list:
 <pre>\l</pre>
