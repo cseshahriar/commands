@@ -1,0 +1,28 @@
+import random
+from Core.models import User
+
+
+def OTPGenerator(username):
+    """generating the OTP"""
+    rand_otp = random.randint(100000, 999999)
+    otp_str = str(rand_otp)
+
+    # clear old otp
+    try:
+        user = User.objects.get(username=username)
+        user.email_otp = ''
+        user.phone_otp = ''
+        user.save()
+    except User.DoesNotExist:
+        return False
+
+    # username check
+    if '@' in username:
+        user.email_otp = otp_str
+        user.save()
+    else:
+        user.phone_otp = otp_str
+        user.save()
+
+    return otp_str
+
