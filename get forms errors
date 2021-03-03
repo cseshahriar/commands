@@ -1,0 +1,8 @@
+def get_context_data(self, **kwargs):
+        ''' *** return all form errors '''
+        context = super().get_context_data(**kwargs)
+        if self.request.POST:
+            for key in list(context.keys()):
+                if hasattr(context[key], 'errors'):
+                    print(f'{key} form error is {context[key].errors}\n\n')
+        return context
