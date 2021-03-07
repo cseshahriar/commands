@@ -6,3 +6,6 @@ for instance in instances:
     instance.user = request.user
     instance.save()
 formset.save_m2m()
+
+
+Ref: https://www.kite.com/python/docs/django.contrib.admin.ModelAdmin.save_formset
