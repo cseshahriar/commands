@@ -2,6 +2,12 @@
 
 <pre>sudo -u postgres psql / sudo su - postgres</pre>
 
+# Alter User
+<pre>
+sudo -u postgres psql
+sudo -u postgres psql template1
+ALTER USER postgres PASSWORD 'newPassword';
+</pre>
 # Restart: 
   
 <pre>sudo systemctl restart postgresql</pre>
