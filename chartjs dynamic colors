@@ -1,0 +1,28 @@
+
+Here, I solved this issue by making two functions.
+
+1. dynamicColors() to generate random color
+
+function dynamicColors() {
+    var r = Math.floor(Math.random() * 255);
+    var g = Math.floor(Math.random() * 255);
+    var b = Math.floor(Math.random() * 255);
+    return "rgba(" + r + "," + g + "," + b + ", 0.5)";
+}
+2. poolColors() to create array of colors
+
+function poolColors(a) {
+    var pool = [];
+    for(i = 0; i < a; i++) {
+        pool.push(dynamicColors());
+    }
+    return pool;
+}
+Then, just pass it
+
+datasets: [{
+    data: arrData,
+    backgroundColor: poolColors(arrData.length),
+    borderColor: poolColors(arrData.length),
+    borderWidth: 1
+}]
