@@ -1,0 +1,5 @@
+  object_id = forms.ChoiceField(
+        choices=[
+            (choice.pk, choice) for choice in ProjectBudget.objects.all()
+        ]
+    )
