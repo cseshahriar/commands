@@ -43,7 +43,7 @@ There are several options for the backup format:
 *.tar: tarball
 
 backup:
-<pre>pg_dump dbname > dbname.bak</pre>
+<pre>pg_dump -U username -h localhost dbname > filename.psql</pre>
 
 
 Automate Backups with a Cron Task:
