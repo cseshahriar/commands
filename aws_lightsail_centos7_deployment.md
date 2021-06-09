@@ -195,6 +195,7 @@ https://computingforgeeks.com/how-to-install-python-3-on-centos/
 
 
 ## 5 Install Postgresql-12
+1.
 <pre>
 sudo yum install https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
 sudo yum list postgresql*
@@ -204,30 +205,30 @@ sudo systemctl start postgresql-12.service
 sudo systemctl enable postgresql-12.service
 sudo systemctl status postgresql-12.service</pre>
 
-5. Configure Firewall
+2. Configure Firewall
 If the firewall is configured on CentOS, we need to open ports so remote users can connect to PostgreSQL:
 <pre>
 sudo firewall-cmd --add-service=postgresql --permanent
 sudo firewall-cmd --reload</pre>
 
-6. Enable Remote Access
+3. Enable Remote Access
 To allow PostgreSQL to accept remote connections, first, we need to change the listen address to * in the configuration file /var/lib/pgsql/11/data/postgresql.conf:
 <pre>sudo nano /var/lib/pgsql/11/data/postgresql.conf<pre>
 
-# CHANGE TO THIS (192.168.61.135 or *)
+CHANGE TO THIS (192.168.61.135 or *)
 <pre>listen_addresses = '192.168.61.135'</pre>
 
-Also, we need to let PostgreSQL know to accept remote connections in file /var/lib/pgsql/11/data/pg_hba.conf:
+4. Also, we need to let PostgreSQL know to accept remote connections in file /var/lib/pgsql/11/data/pg_hba.conf:
 
 <pre>sudo nano /var/lib/pgsql/11/data/pg_hba.conf</pre>
 
-# APPEND/EDIT THE FOLLOWING (choose anywhere or within trusted subnet)
-# ALSO CHANGE ANY ident METHOD TO md5
+APPEND/EDIT THE FOLLOWING (choose anywhere or within trusted subnet)
+ALSO CHANGE ANY ident METHOD TO md5
 
-# Accept from anywhere
+5. Accept from anywhere
     <pre>host all all 0.0.0.0/0 md5</pre>
     
-# Accept from trusted subnet
+6. Accept from trusted subnet
     <pre>host all all 192.168.61.0/24 md5</pre>
     
 7. Enable and Start PostgreSQL Service
@@ -263,6 +264,7 @@ From server 192.168.61.140 (app server):
 
 From server 192.168.61.139 (db server):
 <pre>psql -U project_db_user -h 192.168.61.140 -d project_db</pre>
+
 
 ## 6 Install Nginx
 <pre>
