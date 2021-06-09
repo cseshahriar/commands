@@ -217,14 +217,14 @@ sudo firewall-cmd --add-service=postgresql --permanent
 sudo firewall-cmd --reload</pre>
 
 3. Enable Remote Access
-To allow PostgreSQL to accept remote connections, first, we need to change the listen address to * in the configuration file /var/lib/pgsql/11/data/postgresql.conf:
-<pre>sudo nano /var/lib/pgsql/11/data/postgresql.conf</pre>
+To allow PostgreSQL to accept remote connections, first, we need to change the listen address to * in the configuration file /var/lib/pgsql/12/data/postgresql.conf:
+<pre>sudo nano /var/lib/pgsql/12/data/postgresql.conf</pre>
 
 CHANGE TO THIS (192.168.61.135 or *)
 <pre>listen_addresses = '192.168.61.135'</pre>
 
-4. Also, we need to let PostgreSQL know to accept remote connections in file /var/lib/pgsql/11/data/pg_hba.conf:
-<pre>sudo nano /var/lib/pgsql/11/data/pg_hba.conf</pre>
+4. Also, we need to let PostgreSQL know to accept remote connections in file /var/lib/pgsql/12/data/pg_hba.conf:
+<pre>sudo nano /var/lib/pgsql/12/data/pg_hba.conf</pre>
 
 APPEND/EDIT THE FOLLOWING (choose anywhere or within trusted subnet)
 ALSO CHANGE ANY ident METHOD TO md5
@@ -237,8 +237,8 @@ ALSO CHANGE ANY ident METHOD TO md5
     
 7. Enable and Start PostgreSQL Service
 <pre>
-sudo systemctl enable postgresql-11.service
-sudo systemctl start postgresql-11.service</pre>
+sudo systemctl enable postgresql-12.service
+sudo systemctl start postgresql-12.service</pre>
 
 8. Set PostgreSQL Admin Password
 Set admin user and password for PostgreSQL:
