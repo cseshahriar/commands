@@ -32,11 +32,11 @@ First, we can check what the current hostname is: <pre>hostnamectl</pre>
 # output of hostnamectl
 
 Secondly, we set a new hostname using a Fully Qualified Domain Name (FQDN):
-# for APP-SERVER
+# for server 1
 <pre>hostnamectl set-hostname domain.com</pre>
 <pre>hostnamectl set-hostname "app name" --pretty</pre>
 
-# for DB-SERVER
+# for server 2
 <pre>hostnamectl set-hostname pmdb.domain.com</pre>
 <pre>hostnamectl set-hostname "app name db" --pretty</pre>
 
@@ -45,7 +45,7 @@ Third, we edit the /etc/hosts file to include the hostname:
 
 Add the hostname to the end of the two lines:
 
-# for APP-SERVER
+# for server
 <pre>127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4 domain.com</pre>
 <pre>::1         localhost localhost.localdomain localhost6 localhost6.localdomain6 domain.com</pre>
 
@@ -188,6 +188,8 @@ Pip is also installed.
 <pre>pip3.8 --version</pre>
 
 <pre>sudo yum install python3 python3-libs python3-devel python3-pip </pre>
+or
+<pre>sudo yum install redhat-rpm-config python-devel python3-devel python-pip python3-pip python-setuptools python3-setuptools python-wheel python3-wheel python-cffi python36-cffi libffi-devel cairo pango gdk-pixbuf2</pre>
 Reference:
 https://computingforgeeks.com/how-to-install-python-3-on-centos/
 
