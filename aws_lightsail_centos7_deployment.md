@@ -409,34 +409,37 @@ sudo systemctl enable uwsgi
 
 6. Configure NginX
 <pre>sudo nano /etc/nginx/conf.d/project_dir.conf</pre>
+/etc/nginx/nginx.conf
+
 Copy-paste the following configuration:
 <pre>
 upstream uwsgi {
-        server unix:/opt/PM_Fellowship/uwsgi/uwsgi.sock;
+        server unix:/opt/advance-ticket-system/uwsgi/uwsgi.sock;
 }
 
 server {
         listen 80;
-        server_name pmfellowship.pmo.gov.bd;
+        server_name 3.6.38.103;
         charset utf-8;
 
         client_max_body_size 16M;
 
         location /static {
-                alias /opt/PM_Fellowship/static;
+                alias /opt/advance-ticket-system/static;
         }
 
-        location /media {
-                alias /opt/PM_Fellowship/media;
+	location /media {
+                alias /opt/advance-ticket-system/media;
         }
 
-        location / {
+	location / {
                 include uwsgi_params;
                 uwsgi_pass uwsgi;
                 uwsgi_read_timeout 300s;
                 uwsgi_send_timeout 300s;
         }
 }
+
 </pre>
 Test the NginX configuration:
 
