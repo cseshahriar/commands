@@ -89,13 +89,13 @@ Following file needs to be created or edited: ~/.ssh/config:
 <pre>sudo nano ~/.ssh/config
 ~/.ssh/config:</pre>
 
-Host APP-SERVER
+Host server 1
     <pre>
     HostName 192.168.61.141
     User superuser
     Port 22</pre>
     
-Host DB-SERVER
+Host server 2
     <pre>HostName 192.168.61.132
     User superuser
     Port 22</pre>
