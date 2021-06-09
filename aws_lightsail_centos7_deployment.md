@@ -187,5 +187,6 @@ Python 3.8.3
 Pip is also installed.
 <pre>pip3.8 --version</pre>
 
+<pre>sudo yum install python3 python3-libs python3-devel python3-pip </pre>
 Reference:
 https://computingforgeeks.com/how-to-install-python-3-on-centos/
