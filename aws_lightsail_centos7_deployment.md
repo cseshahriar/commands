@@ -208,6 +208,7 @@ sudo systemctl status postgresql-12.service</pre>
 2. Configure Firewall
 If the firewall is configured on CentOS, we need to open ports so remote users can connect to PostgreSQL:
 <pre>
+sudo yum install firewalld
 sudo firewall-cmd --add-service=postgresql --permanent
 sudo firewall-cmd --reload</pre>
 
