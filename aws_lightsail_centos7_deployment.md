@@ -195,7 +195,7 @@ https://computingforgeeks.com/how-to-install-python-3-on-centos/
 ## 5 Install Postgresql-12
 <pre>
 sudo yum install https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
-yum list postgresql*
+sudo yum list postgresql*
 sudo yum install postgresql12-server
 sudo /usr/pgsql-12/bin/postgresql-12-setup initdb
 sudo systemctl start postgresql-12.service
