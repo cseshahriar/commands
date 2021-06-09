@@ -305,6 +305,7 @@ python manage.py migrate</pre>
 # if require admin privileges
 <pre>sudo /opt/venv/bin/python manage.py runserver 0.0.0.0:80</pre>
 
+
 ## 7 Install Nginx
 
 1. Install NginX
@@ -316,20 +317,25 @@ sudo yum install nginx</pre>
 sudo systemctl enable nginx
 sudo systemctl status nginx</pre>
 
+
 3. Install uWSGI into project environment
 <pre>pip install uwsgi</pre>
 
 4. Configure uWSGI
+<pre>
 # change directory to project root directory
 <pre>cd /opt/project_dir</pre>
+
 # make directory for uwsgi
-<pre>mkdir uwsgi</pe>
+<pre> mkdir uwsgi</pre>
+
 # create uwsgi config file
 <pre>nano uwsgi/uwsgi.ini</pre>
 
 Copy-paste the configuration into uwsgi.ini:
-
+<pre>
 [uwsgi]
+
 # Django-related settings
 # the base directory (full path)
 chdir           = /opt/PM_Fellowship
@@ -348,20 +354,23 @@ socket          = /opt/PM_Fellowship/uwsgi/uwsgi.sock
 chmod-socket    = 666
 # clear environment on exit
 vacuum          = true
+</pre>
+
 Create log file:
-
+<pre>
 touch uwsgi/uwsgi.log
-chmod 664 uwsgi/uwsgi.log
-Test uWSGI:
+chmod 664 uwsgi/uwsgi.log</pre>
 
-uwsgi --ini uwsgi/uwsgi.ini
+Test uWSGI:
+<pre>uwsgi --ini uwsgi/uwsgi.ini</pre>
 If there are any errors please cat or tail the log file uwsgi.log
 
+
 5. Create SystemD unit file for uWSGI
-<pre>sudo nano /etc/systemd/system/uwsgi.service</pre>
+<pre>
+sudo nano /etc/systemd/system/uwsgi.service</pre>
 
 Copy-paste the following configuration:
-
 <pre>
 [Unit]
 Description=PM Fellowship uWSGI instance
@@ -379,11 +388,14 @@ Type=notify
 NotifyAccess=all
 
 [Install]
-WantedBy=multi-user.target</pre>
+WantedBy=multi-user.target
+</pre>
 
 File and directory ownership
+
 # add superuser to nginx group
 <pre>sudo usermod -a -G nginx superuser</pre>
+
 # change ownership to include nginx group
 <pre>sudo chown -R superuser:nginx /opt/project_dir
 sudo chown -R superuser:nginx /opt/venv</pre>
@@ -392,11 +404,11 @@ Start and Enable on startup
 <pre>
 sudo systemctl daemon-reload
 sudo systemctl start uwsgi
-sudo systemctl enable uwsgi</pre>
+sudo systemctl enable uwsgi
+</pre>
 
 6. Configure NginX
 <pre>sudo nano /etc/nginx/conf.d/project_dir.conf</pre>
-
 Copy-paste the following configuration:
 <pre>
 upstream uwsgi {
@@ -425,18 +437,13 @@ server {
                 uwsgi_send_timeout 300s;
         }
 }
-
 </pre>
-
 Test the NginX configuration:
-<pre>
+
 sudo nginx -t
 Restart NginX to apply config:
-sudo systemctl restart nginx</pre>
 
-
-## install uwsgi
-<pre>pip install uwsgi</pre>
+sudo systemctl restart nginx
 
 
 ## opt permissions
