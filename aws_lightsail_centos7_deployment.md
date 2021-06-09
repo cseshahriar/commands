@@ -204,6 +204,66 @@ sudo systemctl start postgresql-12.service
 sudo systemctl enable postgresql-12.service
 sudo systemctl status postgresql-12.service</pre>
 
+5. Configure Firewall
+If the firewall is configured on CentOS, we need to open ports so remote users can connect to PostgreSQL:
+<pre>
+sudo firewall-cmd --add-service=postgresql --permanent
+sudo firewall-cmd --reload</pre>
+
+6. Enable Remote Access
+To allow PostgreSQL to accept remote connections, first, we need to change the listen address to * in the configuration file /var/lib/pgsql/11/data/postgresql.conf:
+<pre>sudo nano /var/lib/pgsql/11/data/postgresql.conf<pre>
+
+# CHANGE TO THIS (192.168.61.135 or *)
+<pre>listen_addresses = '192.168.61.135'</pre>
+
+Also, we need to let PostgreSQL know to accept remote connections in file /var/lib/pgsql/11/data/pg_hba.conf:
+
+<pre>sudo nano /var/lib/pgsql/11/data/pg_hba.conf</pre>
+
+# APPEND/EDIT THE FOLLOWING (choose anywhere or within trusted subnet)
+# ALSO CHANGE ANY ident METHOD TO md5
+
+# Accept from anywhere
+    <pre>host all all 0.0.0.0/0 md5</pre>
+    
+# Accept from trusted subnet
+    <pre>host all all 192.168.61.0/24 md5</pre>
+    
+7. Enable and Start PostgreSQL Service
+<pre>sudo systemctl enable postgresql-11.service
+sudo systemctl start postgresql-11.service<pre>
+
+8. Set PostgreSQL Admin Password
+Set admin user and password for PostgreSQL:
+
+<pre>sudo su - postgres
+psql -c "alter user postgres with password 'Shosen123#'"</pre>
+
+9. Create User and Database: pm_fellowship_user and pm_fellowship_db
+<pre>psql
+CREATE USER pm_fellowship_user WITH ENCRYPTED PASSWORD 'Milton123#';
+CREATE DATABASE pm_fellowship_db;
+GRANT ALL PRIVILEGES ON DATABASE pm_fellowship_db TO pm_fellowship_user;</pre>
+
+# LIST USERS OR DATABASE USING THE FOLLOWING COMMANDS WITHIN PSQL
+<pre>\du   # list users
+\l    # list databases
+\q    # to quit psql</pre>
+
+You can drop a database within psql using the following command:
+<pre>
+psql
+DROP DATABASE project_db;</pre>
+
+10 a. Access Remote Database Remotely
+
+From server 192.168.61.140 (app server):
+<pre>psql -U project_db_user -h 192.168.61.139 -d project_db</pre>
+
+From server 192.168.61.139 (db server):
+<pre>psql -U project_db_user -h 192.168.61.140 -d project_db</pre>
+
 ## 6 Install Nginx
 <pre>
 sudo yum install epel-release
