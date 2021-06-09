@@ -244,3 +244,11 @@ python manage.py runserver 0.0.0.0:80
 
 # if require admin privileges
 sudo /opt/PM_venv/bin/python manage.py runserver 0.0.0.0:80
+
+## opt permissions
+sudo chmod +x file.sh
+sudo chmod +x /opt/*
+sudo chmod +xw /opt/*
+sudo chmod +x /opt/bin/*
+
+PATH=$PATH:/opt/bin
