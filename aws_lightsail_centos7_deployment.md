@@ -105,3 +105,34 @@ ssh APP-SERVER
 
 References:
 https://linuxize.com/post/using-the-ssh-config-file/
+
+## Set SELinux
+1. Check the SELinux Status
+To view the current SELinux status and the SELinux policy that is being used on your system, use the sestatus command:
+
+<pre>sestatus</pre>
+You can temporarily change the SELinux mode from targeted to permissive with the following command:
+
+<pre>sudo setenforce 0</pre>
+2a. Set SELinux Status to Permissive
+To set SELinux to Permissive on your CentOS 7 system, follow the steps. Open the /etc/selinux/config file and set the SELINUX mod to permissive:
+
+<pre>sudo nano /etc/selinux/config</pre>
+Save the file and reboot your CentOS system with:
+
+<pre>sudo shutdown -r now</pre>
+Once the system boots up, verify the change with the sestatus command:
+
+<pre>sestatus</pre>
+2b. Disable SELinux
+To permanently disable SELinux on your CentOS 7 system, follow the steps. Open the /etc/selinux/config file and set the SELINUX mod to disabled:
+
+<pre>sudo nano /etc/selinux/config</pre>
+Save the file and reboot your CentOS system with:
+
+<pre>sudo shutdown -r now</pre>
+Once the system boots up, verify the change with the sestatus command:
+
+<pre>sestatus</pre>
+References:
+https://linuxize.com/post/how-to-disable-selinux-on-centos-7/
