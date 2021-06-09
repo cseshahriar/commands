@@ -250,6 +250,6 @@ sudo /opt/PM_venv/bin/python manage.py runserver 0.0.0.0:80
 sudo chmod +x /opt/*
 sudo chmod +xw /opt/*
 sudo chmod +x /opt/bin/*
-
+sudo chmod -R 777 /opt
 PATH=$PATH:/opt/bin
 </pre>
