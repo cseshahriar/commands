@@ -256,6 +256,7 @@ GRANT ALL PRIVILEGES ON DATABASE project_db TO project_user;</pre>
 <pre>\du   # list users
 \l    # list databases
 \q    # to quit psql</pre>
+exit;
 
 You can drop a database within psql using the following command:
 <pre>
@@ -269,6 +270,8 @@ From server 192.168.61.140 (app server):
 
 From server 192.168.61.139 (db server):
 <pre>psql -U project_db_user -h 192.168.61.140 -d project_db</pre>
+
+systemctl restart postgresql-12.service
 
 
 ## 6 Install Nginx
