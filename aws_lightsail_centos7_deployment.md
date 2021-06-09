@@ -45,7 +45,7 @@ Third, we edit the /etc/hosts file to include the hostname:
 
 Add the hostname to the end of the two lines:
 
-# for PM-APP-SERVER
+# for APP-SERVER
 <pre>127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4 domain.com</pre>
 <pre>::1         localhost localhost.localdomain localhost6 localhost6.localdomain6 domain.com</pre>
 
@@ -136,3 +136,56 @@ Once the system boots up, verify the change with the sestatus command:
 <pre>sestatus</pre>
 References:
 https://linuxize.com/post/how-to-disable-selinux-on-centos-7/
+
+
+## 4 Install Python 3.8
+1. Install yum-utils and Development Tools:
+<pre>sudo yum install yum-utils
+sudo yum groups install "Development Tools"</pre>
+
+2. Install EPEL:
+<pre>
+sudo yum install epel-release
+sudo yum install epel-release-7-11.noarch.rpm
+sudo yum check-update
+sudo yum update</pre>
+
+3. Install Python 3.8:
+Step 1: Install Python Dependencies
+<pre>
+sudo yum -y update
+sudo yum -y groupinstall "Development Tools"
+sudo yum -y install openssl-devel bzip2-devel libffi-devel
+</pre>
+
+Step 2: Download latest Python 3.8 Archive
+<pre>
+sudo yum -y install wget
+wget https://www.python.org/ftp/python/3.8.3/Python-3.8.3.tgz
+</pre>
+
+Extract the package.
+<pre>
+tar xvf Python-3.8.3.tgz</pre>
+
+Change the created directory:
+<pre>cd Python-3.8*/</pre>
+
+Step 2: Install Python 3.8 on CentOS 7 / CentOS 8
+Setup installation by running the configure script.
+<pre>./configure --enable-optimizations</pre>
+
+Initiate compilation of Python 3.8 on CentOS 7.
+<pre>sudo make altinstall</pre>
+
+If this was successful, you should get a message like below:
+
+Confirm that the installation of Python 3.8 on CentOS 8 / CentOS 7 was successful.
+<pre>python3.8 --version</pre>
+Python 3.8.3
+
+Pip is also installed.
+<pre>pip3.8 --version</pre>
+
+Reference:
+https://computingforgeeks.com/how-to-install-python-3-on-centos/
