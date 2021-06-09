@@ -214,27 +214,27 @@ sudo firewall-cmd --reload</pre>
 
 3. Enable Remote Access
 To allow PostgreSQL to accept remote connections, first, we need to change the listen address to * in the configuration file /var/lib/pgsql/11/data/postgresql.conf:
-<pre>sudo nano /var/lib/pgsql/11/data/postgresql.conf<pre>
+<pre>sudo nano /var/lib/pgsql/11/data/postgresql.conf</pre>
 
 CHANGE TO THIS (192.168.61.135 or *)
 <pre>listen_addresses = '192.168.61.135'</pre>
 
 4. Also, we need to let PostgreSQL know to accept remote connections in file /var/lib/pgsql/11/data/pg_hba.conf:
-
 <pre>sudo nano /var/lib/pgsql/11/data/pg_hba.conf</pre>
 
 APPEND/EDIT THE FOLLOWING (choose anywhere or within trusted subnet)
 ALSO CHANGE ANY ident METHOD TO md5
 
 5. Accept from anywhere
-    <pre>host all all 0.0.0.0/0 md5</pre>
+<pre>host all all 0.0.0.0/0 md5</pre>
     
 6. Accept from trusted subnet
-    <pre>host all all 192.168.61.0/24 md5</pre>
+<pre>host all all 192.168.61.0/24 md5</pre>
     
 7. Enable and Start PostgreSQL Service
-<pre>sudo systemctl enable postgresql-11.service
-sudo systemctl start postgresql-11.service<pre>
+<pre>
+sudo systemctl enable postgresql-11.service
+sudo systemctl start postgresql-11.service</pre>
 
 8. Set PostgreSQL Admin Password
 Set admin user and password for PostgreSQL:
@@ -242,11 +242,11 @@ Set admin user and password for PostgreSQL:
 <pre>sudo su - postgres
 psql -c "alter user postgres with password 'Shosen123#'"</pre>
 
-9. Create User and Database: pm_fellowship_user and pm_fellowship_db
+9. Create User and Database: project_user and project_db
 <pre>psql
-CREATE USER pm_fellowship_user WITH ENCRYPTED PASSWORD 'Milton123#';
-CREATE DATABASE pm_fellowship_db;
-GRANT ALL PRIVILEGES ON DATABASE pm_fellowship_db TO pm_fellowship_user;</pre>
+CREATE USER project_user WITH ENCRYPTED PASSWORD 'Shosen123#';
+CREATE DATABASE project_db;
+GRANT ALL PRIVILEGES ON DATABASE project_db TO project_user;</pre>
 
 # LIST USERS OR DATABASE USING THE FOLLOWING COMMANDS WITHIN PSQL
 <pre>\du   # list users
@@ -299,14 +299,15 @@ cd project_name
 pip install -r requirements.txt</pre>
 
 5. Make Migrations (if any)
+<pre>
 python manage.py makemigrations
-python manage.py migrate
+python manage.py migrate</pre>
 
 7. Test application
-python manage.py runserver 0.0.0.0:80
+<pre>python manage.py runserver 0.0.0.0:80</pre>
 
 # if require admin privileges
-sudo /opt/PM_venv/bin/python manage.py runserver 0.0.0.0:80
+<pre>sudo /opt/venv/bin/python manage.py runserver 0.0.0.0:80</pre>
 
 ## opt permissions
 <pre>sudo chmod +x file.sh
