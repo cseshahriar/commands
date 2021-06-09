@@ -190,3 +190,24 @@ Pip is also installed.
 <pre>sudo yum install python3 python3-libs python3-devel python3-pip </pre>
 Reference:
 https://computingforgeeks.com/how-to-install-python-3-on-centos/
+
+
+## 5 Install Postgresql-12
+<pre>
+sudo yum install https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+yum list postgresql*
+sudo yum install postgresql12-server
+sudo /usr/pgsql-12/bin/postgresql-12-setup initdb
+sudo systemctl start postgresql-12.service
+sudo systemctl enable postgresql-12.service
+sudo systemctl status postgresql-12.service</pre>
+
+## 6 Install Nginx
+<pre>
+sudo yum install epel-release
+sudo yum install nginx
+sudo systemctl start nginx
+sudo systemctl status nginx</pre>
+
+## install uwsgi
+<pre>pip install uwsgi</pre>
