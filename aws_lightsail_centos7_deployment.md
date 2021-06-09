@@ -213,3 +213,34 @@ sudo systemctl status nginx</pre>
 
 ## install uwsgi
 <pre>pip install uwsgi</pre>
+
+## 7 Django Deploy
+1. Install python dependency 
+<pre>sudo yum install redhat-rpm-config python-devel python3-devel python-pip python3-pip python-setuptools python3-setuptools python-wheel python3-wheel python-cffi python36-cffi libffi-devel cairo pango gdk-pixbuf2</pre>
+
+2. Create and Activate Virtual Environment
+<pre>
+cd /opt
+sudo python3 -m venv venv
+sudo chown -R superuser:superuser venv
+source venv/bin/activate</pre>
+
+3. Download project_name repository
+<pre>
+sudo git clone -b release --single-branch https://github.com/username/project_name.git
+sudo chown -R superuser:superuser project_name</pre>
+
+4. Install project requirements.txt
+<pre>
+cd project_name
+pip install -r requirements.txt</pre>
+
+5. Make Migrations (if any)
+python manage.py makemigrations
+python manage.py migrate
+
+7. Test application
+python manage.py runserver 0.0.0.0:80
+
+# if require admin privileges
+sudo /opt/PM_venv/bin/python manage.py runserver 0.0.0.0:80
