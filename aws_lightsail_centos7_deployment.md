@@ -325,7 +325,7 @@ Check the status of the Nginx service with the following command:
 Use the following commands to open the necessary ports:
 <pre>sudo firewall-cmd --permanent --zone=public --add-service=http
 sudo firewall-cmd --permanent --zone=public --add-service=https
-sudo firewall-cmd --reload<pre>
+sudo firewall-cmd --reload</pre>
 
 To verify your Nginx installation, open http://YOUR_IP in your browser of choice, and you will see the default Nginx welcome page as shown in the image below:
 
