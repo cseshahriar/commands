@@ -307,15 +307,50 @@ python manage.py migrate</pre>
 
 
 ## 7 Install Nginx
+Nginx packages are available in the EPEL repositories. If you don’t have EPEL repository already installed you can do it by typing:
+<pre>sudo yum install epel-release</pre>
 
-1. Install NginX
-<pre>sudo yum install epel-release
-sudo yum install nginx</pre>
+Install Nginx by typing the following yum command:
+<pre>sudo yum install nginx</pre>
 
-2. Run NginX and Enable on Startup
-<pre>sudo systemctl start nginx
-sudo systemctl enable nginx
-sudo systemctl status nginx</pre>
+
+Once the installation is complete, enable and start the Nginx service with:
+<pre>sudo systemctl enable nginx
+sudo systemctl start nginx</pre>
+
+
+Check the status of the Nginx service with the following command:
+<pre>sudo systemctl status nginx</pre>
+
+Use the following commands to open the necessary ports:
+<pre>sudo firewall-cmd --permanent --zone=public --add-service=http
+sudo firewall-cmd --permanent --zone=public --add-service=https
+sudo firewall-cmd --reload<pre>
+
+To verify your Nginx installation, open http://YOUR_IP in your browser of choice, and you will see the default Nginx welcome page as shown in the image below:
+
+Manage the Nginx Service with systemctl
+
+To stop the Nginx service, run:
+<pre>sudo systemctl stop nginx</pre>
+
+To start it again, type:
+<pre>sudo systemctl start nginx</pre>
+
+To restart the Nginx service :
+<pre>sudo systemctl restart nginx</pre>
+
+Reload the Nginx service after you have made some configuration changes:
+<pre>sudo systemctl reload nginx</pre>
+
+If you want to disable the Nginx service to start at boot:
+<pre>sudo systemctl disable nginx</pre>
+
+And to re-enable it again:
+<pre>sudo systemctl enable nginx</pre>
+
+references:
+https://linuxize.com/post/how-to-install-nginx-on-centos-7/
 
 
 3. Install uWSGI into project environment
