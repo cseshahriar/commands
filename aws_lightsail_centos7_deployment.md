@@ -444,7 +444,6 @@ sudo systemctl enable uwsgi
 
 6. Configure NginX
 <pre>sudo nano /etc/nginx/conf.d/project_dir.conf</pre>
-/etc/nginx/nginx.conf
 
 Copy-paste the following configuration:
 <pre>
