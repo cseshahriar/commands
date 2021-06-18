@@ -151,13 +151,13 @@ sudo yum check-update
 sudo yum update</pre>
 
 # method 2
+<pre>
 sudo yum install wget
 cd /tmp
 wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 ls *.rpm
-To install epel-release-7-11.noarch.rpm, type:
 sudo yum install epel-release-latest-7.noarch.rpm
-
+</pre>
 
 3. Install Python 3.8:
 Step 1: Install Python Dependencies
