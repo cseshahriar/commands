@@ -491,3 +491,262 @@ sudo chmod +x /opt/bin/*
 sudo chmod -R 777 /opt
 PATH=$PATH:/opt/bin
 </pre>
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+21  sudo mkdir /etc/nginx/conf.d
+   22  sudo nano /etc/nginx/conf.d/ticket_sytem.conf
+
+	upstream ticket {
+		server unix:/opt/advance_ticket_system/uwsgi/uwsgi.sock;
+	}
+
+	server {
+		listen 80;
+		server_name 3.6.38.103;
+
+		access_log /opt/advance_ticket_system/logs/access.log;
+		error_log /opt/advance_ticket_system/logs/error.log;
+
+		charset utf-8;
+		client_max_body_size 16M;
+
+		location /static {
+			alias /opt/advance_ticket_system/staticfiles;
+		}
+
+		location /media {
+			alias /opt/advance_ticket_system/media;
+		}
+
+		location / {
+			uwsgi_pass ticket;
+			include uwsgi_params;
+			uwsgi_read_timeout 300s;
+			uwsgi_send_timeout 300s;
+		}
+	}
+
+   23  sudo sestatus
+   24  sudo cat /etc/systemd/system/uwsgi.service 
+   	[Unit]
+	Description=Advance Ticket System uWSGI instance
+	After=network.target postgresql-12.service
+
+	[Service]
+	User=superuser
+	Group=nginx
+	WorkingDirectory=/opt/advance_ticket_system
+	Environment="PATH=/opt/venv/bin"
+	ExecStart=/opt/venv/bin/uwsgi --ini /opt/advance_ticket_system/uwsgi/uwsgi.ini
+	Restart=always
+	KillSignal=SIGQUIT
+	Type=notify
+	NotifyAccess=all
+
+	[Install]
+	WantedBy=multi-user.target
+
+   25  sudo systemctl status uwsgi
+   26  cd /opt/advance_ticket_system
+   27  ll
+   28  sudo nano /etc/nginx/conf.d/ticket_sytem.conf
+   	upstream ticket {
+        	server unix:/opt/advance_ticket_system/uwsgi/uwsgi.sock;
+	}
+
+	server {
+		listen 80;
+		server_name 3.6.38.103;
+
+		access_log /opt/advance_ticket_system/logs/access.log;
+		error_log /opt/advance_ticket_system/logs/error.log;
+
+		charset utf-8;
+		client_max_body_size 16M;
+
+		location /static {
+		        alias /opt/advance_ticket_system/staticfiles;
+		}
+
+		location /media {
+		        alias /opt/advance_ticket_system/media;
+		}
+
+		location / {
+		        uwsgi_pass ticket;
+		        include uwsgi_params;
+		        uwsgi_read_timeout 300s;
+		        uwsgi_send_timeout 300s;
+		}
+	}
+   29  sudo nginx -t
+   30  sudo nano /etc/nginx/conf.d/ticket_sytem.conf
+   	upstream ticket {
+        	server unix:/opt/advance_ticket_system/uwsgi/uwsgi.sock;
+	}
+
+	server {
+		listen 80;
+		server_name 3.6.38.103;
+
+		access_log /opt/advance_ticket_system/logs/access.log;
+		error_log /opt/advance_ticket_system/logs/error.log;
+
+		charset utf-8;
+		client_max_body_size 16M;
+
+		location /static {
+		        alias /opt/advance_ticket_system/staticfiles;
+		}
+
+		location /media {
+		        alias /opt/advance_ticket_system/media;
+		}
+
+		location / {
+		        uwsgi_pass ticket;
+		        include uwsgi_params;
+		        uwsgi_read_timeout 300s;
+		        uwsgi_send_timeout 300s;
+		}
+	}
+   31  sudo nginx -t
+   32  sudo ls /etc/sellinux
+   33  sudo nano /etc/selinux/config 
+   	# This file controls the state of SELinux on the system.
+	# SELINUX= can take one of these three values:
+	#     enforcing - SELinux security policy is enforced.
+	#     permissive - SELinux prints warnings instead of enforcing.
+	#     disabled - No SELinux policy is loaded.
+	SELINUX=permissive
+	# SELINUXTYPE= can take one of three values:
+	#     targeted - Targeted processes are protected,
+	#     minimum - Modification of targeted policy. Only selected processes are protected.
+	#     mls - Multi Level Security protection.
+	SELINUXTYPE=targeted
+	sudo shutdown -r now
+
+   34  sudo reboot
+   35  sudo nginx -t
+   36  sudo systemctl status nginx
+   37  sudo nginx -t
+   38  sudo systemctl restart nginx
+   39  sudo systemctl status nginx
+   40  sudo systemctl status uwsgi
+   41  cd /opt/
+   42  ll
+   43  cd advance_ticket_system
+   44  ll
+   45  ls logs
+   46  sudo cat error.log
+   47  sudo cat logs/error.log
+   48  sudo nginx -t
+   49  sudo tail -f /var/log/nginx/error.log
+   50  rpm -qa "httpd"
+   51  yum remove "httpd*" -y
+   52  sudo yum remove "httpd*" -y
+   53  sudo netstat -tulpn
+   54  sudo rm -rf /var/www
+   55  rm -rf /etc/httpd
+   56  rm -rf /usr/lib64/httpd
+   57  userdel -r apache
+   58  sudo userdel -r apache
+   59  sudo grep "apache" /etc/passwd
+   60  sudo systemctl status httpd
+   61  sudo nginx -t
+   62  sudo systemctl restart nginx
+   63  sudo systemctl status nginx
+   64  sudo tail -f /var/log/nginx/error.log
+   65  sudo systemctl restart nginx
+   66  sudo systemctl daemon-reload
+   67  ll
+   68  sudo nano  ticket_system/settings.py 
+   69  sudo systemctl restart uwsgi
+   70  sudo systemctl status uwsgi
+   71  ls - al
+   72  ls -al
+   73  cd ../
+   74  ll
+   75  cd advance_ticket_system/
+   76  ll
+   77  cat logs/access.log 
+   78  sudo sestatus
+   79  cat logs/error.log 
+   80  ls -al uwsgi/
+   81  cat uwsgi/uwsgi.log 
+   82  sudo cat uwsgi/uwsgi.log 
+   83  sudo nano /etc/nginx/conf.d/ticket_sytem.conf 
+   
+   	upstream ticket {
+        	server unix:/opt/advance_ticket_system/uwsgi/uwsgi.sock;
+	}
+
+	server {
+		listen 80;
+		server_name 3.6.38.103;
+
+		access_log /opt/advance_ticket_system/logs/access.log;
+		error_log /opt/advance_ticket_system/logs/error.log;
+
+		charset utf-8;
+		client_max_body_size 16M;
+
+		location /static {
+		        alias /opt/advance_ticket_system/staticfiles;
+		}
+
+		location /media {
+		        alias /opt/advance_ticket_system/media;
+		}
+
+		location / {
+		        uwsgi_pass ticket;
+		        include uwsgi_params;
+		        uwsgi_read_timeout 300s;
+		        uwsgi_send_timeout 300s;
+		}
+	}
+
+
+   84  sudo systemctl restart nginx
+   85  cat logs/error.log 
+   86  sudo nano /etc/nginx/conf.d/ticket_sytem.conf
+   	upstream ticket {
+        	server unix:/opt/advance_ticket_system/uwsgi/uwsgi.sock;
+	}
+
+	server {
+		listen 80;
+		server_name 3.6.38.103;
+
+		access_log /opt/advance_ticket_system/logs/access.log;
+		error_log /opt/advance_ticket_system/logs/error.log;
+
+		charset utf-8;
+		client_max_body_size 16M;
+
+		location /static {
+		        alias /opt/advance_ticket_system/staticfiles;
+		}
+
+		location /media {
+		        alias /opt/advance_ticket_system/media;
+		}
+
+		location / {
+		        uwsgi_pass ticket;
+		        include uwsgi_params;
+		        uwsgi_read_timeout 300s;
+		        uwsgi_send_timeout 300s;
+		}
+	}
+
+   
+   87  sudo nginx -t
+   88  sudo systemctl restart nginx
+   89  sudo systemctl status nginx
+   90  sudo nano uwsgi/uwsgi.ini 
+   91  ll
+   92  sudo systemctl restart uwsgi
+   93  history
+   94  exit
+   95  history
