@@ -1,0 +1,585 @@
+## js
+$(function() {
+      
+       $("#create_btn").clict(function (e) {
+          // create form
+          const url = form.attr('data-url'); // console.log('URL: ' + url);
+          $.ajax({
+            url: url,
+            type: 'GET',
+            beforeSend() { $(`#div-spinner`).removeAttr('hidden'); },
+            complete() { $(`#div-spinner`).prop('hidden', true); },
+            success(data) {
+              // console.log(data)
+              $(`#div-confirm-fields`).html(data);
+            },
+          });
+      })
+
+  // create
+  $("#available_budget_form").submit(function (e) {
+
+      const csrftoken = $('[name=csrfmiddlewaretoken]').val(); // console.log('TOKEN: ' + csrftoken);
+
+      function csrfSafeMethod(method) {
+          // these HTTP methods do not require CSRF protection
+          return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+      }
+
+      e.preventDefault(); // prevents default action and uses ajax below
+
+  
+      $.ajaxSetup({
+      beforeSend(xhr, settings) {
+          if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                  xhr.setRequestHeader('X-CSRFToken', csrftoken);
+              }
+          },
+      });
+     
+      
+      # create=
+      const form = $('#available_budget_form');
+      const url = form.attr('data-url'); // console.log('URL: ' + url);
+      const data = new FormData(form[0]);
+      
+      $.ajax({
+          url,
+          data,
+          type: 'POST',
+          contentType: false, // needed, do not omit!
+          processData: false, // needed, do not omit!
+          success(json) {
+                  // console.log(json);
+                  const htmlMsg = `<i class="fas fa-check-circle text-success mr-2"></i> ${json.message}`;
+                  $('#div-check-status').html(htmlMsg).addClass('border-success').removeAttr('hidden');
+          },
+          error(xhr, errmsg, err) {
+
+              var json = xhr.responseJSON.error; 
+              var data = '<ul class="d-block">'; 
+              $.each(json,function(k,v) {
+                      data += "<li class='text-danger'>"+k + ' : '+ v+"</li>"; 
+              });
+              data += '</ul>'; $(".resp ul").append(data); 
+
+              const htmlMsg = `<i class="fas fa-times-circle text-danger mr-2"></i> ${xhr.responseJSON.message}:
+              ${data}`;
+              $('#div-check-status').html(htmlMsg).addClass('border-danger').removeAttr('hidden');
+              console.log(xhr.responseJSON)
+          },
+      });
+
+      // close button function
+      $(`#btn-cancel`).click(() => {
+          $(`#exampleModal`).modal('hide');
+          // remove the status
+          $(`#div-check-status`).prop('hidden', true).html('');
+          // restore the confirm button
+          $(`#btn-confirm-`).html('CREATED <i class="fas fa-check-circle ml-1"></i>').removeAttr('hidden').removeAttr('disabled');
+          location.reload();
+          return false;
+      });
+  });
+});
+
+
+$(document).ready(() => {
+  // =============================== edit and update ======================== 
+  $('.btn-confirm').click(function () {
+  
+    const btn = $(this); // console.log(btn);
+    const checkFormUrl = btn.data('budget-form-url'); // console.log(checkFormUrl);
+    const budgetId = btn.data('budget-id'); // console.log(budget Id);
+    
+    // show the modal
+    $(`#confirm-modal-${budgetId}`).modal('show');  
+
+      // edit form
+      $.ajax({
+        url: checkFormUrl,
+        data: { pk: budgetId },
+        type: 'GET',
+        beforeSend() { $(`#div-spinner-${budgetId}`).removeAttr('hidden'); },
+        complete() { $(`#div-spinner-${budgetId}`).prop('hidden', true); },
+        success(data) {
+          // console.log(data)
+          $(`#div-confirm-fields-${budgetId}`).html(data);
+        },
+      });
+      
+      // update
+      const form = $(`#form-confirm-${budgetId}`);
+      const url = form.attr('data-available-budget-update-url'); // console.log('URL: ' + url);
+      const csrftoken = $('[name=csrfmiddlewaretoken]').val(); // console.log('TOKEN: ' + csrftoken);
+  
+      function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+      }
+  
+      form.submit((e) => {
+        e.preventDefault(); // prevents default action and uses ajax below
+  
+        // button loader
+        $(`#btn-confirm-confirm-${budgetId}`).prop('hidden', true);
+        $(`#btn-confirm-loader-${budgetId}`).removeAttr('hidden');
+  
+        // data
+        const data = new FormData(form[0]);
+        data.append('pk', budgetId);
+        // console.log(data);
+  
+        $.ajaxSetup({
+          beforeSend(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+              xhr.setRequestHeader('X-CSRFToken', csrftoken);
+            }
+          },
+        });
+  
+        $.ajax({
+          url,
+          data,
+          type: 'POST',
+          contentType: false, // needed, do not omit!
+          processData: false, // needed, do not omit!
+          success(json) {
+            // console.log(json);
+            const htmlMsg = `<i class="fas fa-check-circle text-success mr-2"></i> ${json.message}`;
+            $(`#div-check-status-${budgetId}`).html(htmlMsg).addClass('border-success').removeAttr('hidden');
+            $(`#btn-confirm-loader-${budgetId}`).prop('hidden', true);
+            $(`#btn-confirm-confirm-${budgetId}`).removeAttr('hidden').prop('disabled', true);
+            $(`#${btn.attr('id')}`).removeClass('btn-primary').addClass('btn-success').prop('disabled', true);
+          },
+          error(xhr, errmsg, err) {
+            // console.log(err);
+            // console.log(errmsg);
+            // console.log(xhr.responseText);
+            // console.log(xhr.status);
+            var json = xhr.responseJSON.error; 
+            var data = '<ul class="d-block">'; 
+            $.each(json,function(k,v) {
+                      data += "<li class='text-danger'>"+k + ' : '+ v+"</li>"; 
+            });
+            data += '</ul>'; $(".resp ul").append(data); 
+
+            const htmlMsg = `<i class="fas fa-times-circle text-danger mr-2"></i> ${xhr.responseJSON.message}
+            <br/>${data}`;
+
+            $(`#div-check-status-${budgetId}`).html(htmlMsg).addClass('border-danger').removeAttr('hidden');
+            $(`#btn-confirm-confirm-${budgetId}`).removeAttr('hidden').removeAttr('disabled');
+            $(`#btn-confirm-loader-${budgetId}`).prop('hidden', true);
+          },
+        });
+      });
+  
+      // close button function
+      $(`#btn-confirm-cancel-${budgetId}`).click(() => {
+        $(`#confirm-modal-${budgetId}`).modal('hide');
+        // remove the status
+        $(`#div-check-status-${budgetId}`).prop('hidden', true).html('');
+        // restore the confirm button
+        $(`#btn-confirm-confirm-${budgetId}`).removeAttr('hidden').removeAttr('disabled');
+        $(`#btn-confirm-loader-${budgetId}`).prop('hidden', true);
+      });
+
+    });
+
+  });
+  
+  
+  ## py
+class ListView(UserPassesTestMixin, LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    model = YearlyBudget
+    filterset_class = YearlyBudgetFilter
+    permission_required = 'app.view_yearlybudget'
+    template_name = 'list.html'
+    paginate_by = 20  # default
+
+    def test_func(self):
+        return test_user(self.request, test_for='is_staff')
+    
+    def get(self, request, *args, **kwargs):
+        if 'reset' in request.GET:
+            return redirect(reverse_lazy('app:yearly_budget_list'))
+        return super().get(request, *args, **kwargs)
+
+    def get_queryset(self):
+        logger.debug('yearly budget -> get_queryset')
+        queryset = YearlyBudget.objects.all().order_by('-created_at')
+        # Then use the query parameters and the queryset to
+        # instantiate a filterset and save it as an attribute
+        # on the view instance for later.
+        self.filterset = self.filterset_class(
+            self.request.GET,
+            queryset=queryset
+        )
+        # Return the filtered queryset
+        return self.filterset.qs.distinct()
+
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        logger.debug('GET yearly budget -> get_context_data')
+        
+        if 'items_count' not in kwargs:
+            kwargs['items_count'] = len(self.get_queryset())
+
+        if 'filterset' not in kwargs:
+            kwargs['filterset'] = self.filterset
+      
+        if 'form' not in kwargs:
+            kwargs['form'] = YearlyBudgetForm()
+        return super().get_context_data(**kwargs)
+
+    def get_paginate_by(self, queryset):
+        return paginate_func(self)
+
+
+class YearlyBudgetCreateView(UserPassesTestMixin, LoginRequiredMixin, PermissionRequiredMixin, View):
+
+    permission_required = 'app.add_something'
+  
+    def test_func(self):
+        return self.request.user.is_staff
+
+
+    def post(self, request, *args, **kwargs):
+        data = {'success': False, 'message': "Something went wrong"}
+
+        # user check
+        user_passes_test = test_user(request, test_for='is_staff')
+        if not user_passes_test:
+            data.update({'message': 'Forbidden: User failed test'})
+            return JsonResponse(data, status=403)
+
+        # permission check
+        user_perm_test = request.user.has_perm('app.add_yearlybudget')
+        if not user_perm_test:
+            data.update({'message': 'Forbidden: Permission denied'})
+            return JsonResponse(data, status=403)
+
+        # process
+        if request.is_ajax() and request.method == 'POST':
+           
+            logger.debug(f'POST Request: {request.POST}')
+    
+            # check has_central_budger
+            form = YearlyBudgetForm(request.POST)     
+            if form.is_valid():
+                obj = form.save()  # yearly budger created or update obj
+                logger.debug(f'Yearly Budget: {obj}')
+                status = 200  # OK status
+                data = {'success': True,
+                        'message': f"The Yearly Budget ({obj.id}) has "
+                                    f"been created."}
+            else:
+                logger.error(f'Invalid form: {form.errors}')
+                status = 400
+                data = {'message': 'Invalid form', 'error': form.errors}
+
+        return JsonResponse(data, status=status)
+
+
+# edit
+def ajax_yearly_budget_form(request):
+    data = {'success': False, 'message': "Something went wrong"}
+
+    # user check
+    user_passes_test = test_user(request, test_for='is_staff')
+    if not user_passes_test:
+        data.update({'message': 'Forbidden: User failed test'})
+        return JsonResponse(data, status=403)
+
+    # permission check
+    user_perm_test = request.user.has_perm('app.change_yearlybudget')
+    if not user_perm_test:
+        data.update({'message': 'Forbidden: Permission denied'})
+        return JsonResponse(data, status=403)
+
+    # process
+    if request.is_ajax() and request.method == 'GET':
+        logger.debug(f'GET Request: {request.GET}')
+        try:  # get the yearly id or pk
+            pk = int(request.GET.get('pk'))
+            obj = YearlyBudget.objects.get(pk=pk)
+            form = YearlyBudgetForm(instance=obj)
+          
+            logger.debug(f'Check form render for YearlyBudget ID {obj.pk}')
+            status = 200  # OK
+            data = {
+                'success': True,
+                'form': form,
+                'object': obj,
+                'message': f'Check form render for YearlyBudget {obj.pk}'
+            }
+        except Exception as e:
+            logger.error(e)
+            status = 404  # pk or id not found
+            data.update({'message': 'Error: Could not get YearlyBudget ID'})
+    else:
+        logger.error(f'Invalid method: {request.method}')
+        status = 405  # invalid method
+        data.update({'message': 'Invalid method or not ajax request'})
+
+    return render(request, 
+        'app/account/budgets/yearly/load_yearly_budget_fields.html',
+        data, status=status)
+
+
+def ajax_yearly_budget_update(request):
+    data = {'success': False, 'message': "Something went wrong"}
+
+    # user check
+    user_passes_test = test_user(request, test_for='is_staff')
+    if not user_passes_test:
+        data.update({'message': 'Forbidden: User failed test'})
+        return JsonResponse(data, status=403)
+
+    # permission check
+    user_perm_test = request.user.has_perm('app.change_yearlybudget')
+    if not user_perm_test:
+        data.update({'message': 'Forbidden: Permission denied'})
+        return JsonResponse(data, status=403)
+
+
+    # process
+    if request.is_ajax() and request.method == 'POST':
+        logger.debug(f'POST Request: {request.POST}')
+        instance = YearlyBudget.objects.get(pk=request.POST.get('pk'))
+    
+        if instance:
+            form = YearlyBudgetForm(request.POST, instance=instance)
+            if form.is_valid():
+                obj = form.save()  # yearly created obj
+                logger.debug(f'Yearly Budget: {obj}')
+                status = 200  # OK status
+                data = {
+                    'success': True,
+                    'message': f"The Yearly Budget ({obj.id}) has "
+                    f"been saved."
+                }
+            else:
+                logger.error(f'Invalid form: {form.errors}')
+                status = 400
+                data = {'message': 'Invalid form', 'error': form.errors}
+    else:
+        logger.error(f'Invalid method: {request.method}')
+        status = 405  # invalid method
+        data.update({'message': 'Invalid method or not ajax request'})
+
+    return JsonResponse(data, status=status)
+          
+
+
+# list
+class YearlyBudgetAllocationListView(UserPassesTestMixin, LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    model = BudgetAllocation
+    filterset_class = YearlyBudgetAllocationFilter
+    permission_required = 'app.view_budgetallocation'
+    template_name = 'app/account/budgets/yearlyallocation/budget_allocation_list.html'
+    paginate_by = 20  # default
+
+    def test_func(self):
+        return test_user(self.request, test_for='is_staff')
+    
+    def get(self, request, *args, **kwargs):
+        if 'reset' in request.GET:
+            return redirect(reverse_lazy('app:yearly_budget_allocation_list'))
+        return super().get(request, *args, **kwargs)
+
+    def get_queryset(self):
+        yearly_budget = ContentType.objects.get_for_model(YearlyBudget)
+        queryset = BudgetAllocation.objects.filter(content_type=yearly_budget)  # qs return budget_allocation for yearly_budget type 
+        self.filterset = self.filterset_class(
+            self.request.GET,
+            queryset=queryset
+        )
+        # Return the filtered queryset
+        return self.filterset.qs.distinct()
+
+
+    def get_context_data(self, *, object_list=None, **kwargs):       
+        if 'items_count' not in kwargs:
+            kwargs['items_count'] = len(self.get_queryset())
+
+        if 'filterset' not in kwargs:
+            kwargs['filterset'] = self.filterset
+      
+        if 'form' not in kwargs:
+            kwargs['form'] = YearlyBudgetAllocationForm()
+
+        return super().get_context_data(**kwargs)
+
+    def get_paginate_by(self, queryset):
+        """Override get_paginate_by to include value from show_form"""
+        return paginate_func(self)
+
+# create from 
+def ajax_transaction_form(request):
+    data = {'success': False, 'message': "Something went wrong"}
+
+    # user check
+    user_passes_test = test_user(request, test_for='is_staff')
+    if not user_passes_test:
+        data.update({'message': 'Forbidden: User failed test'})
+        return JsonResponse(data, status=403)
+
+    # permission check
+    user_perm_test = request.user.has_perm('app.add_transaction')
+    if not user_perm_test:
+        data.update({'message': 'Forbidden: Permission denied'})
+        return JsonResponse(data, status=403)
+
+    # process
+    if request.is_ajax() and request.method == 'GET':
+        try:  # get the disbursement id or pk
+            pk = int(request.GET.get('pk'))
+            obj = Disbursement.objects.get(pk=pk)
+
+            initial = {'amount_in_bdt': obj.amt_in_bdt, 'type': obj.type}
+            form = MakeTransactionForm(initial=initial)
+
+            logger.debug(f'Check form render for Disbursement ID {obj.pk}')
+            status = 200  # OK
+            data = {'success': True, 'form': form, 'object': obj,
+                    'message': f'Check form render for Disbursement {obj.pk}'}
+        except Exception as e:
+            logger.error(e)
+            status = 404  # pk or id not found
+            data.update({'message': 'Error: Could not get Disbursement ID'})
+    else:
+        status = 405  # invalid method
+        data.update({'message': 'Invalid method or not ajax request'})
+
+    return render(request, 'app/account/snippets/trans_form_fields.html',
+                  data, status=status)
+                  
+                  
+# creation
+def ajax_yearly_budget_allocation_create(request):
+    data = {'success': False, 'message': "Something went wrong"}
+
+    # user check
+    user_passes_test = test_user(request, test_for='is_staff')
+    if not user_passes_test:
+        data.update({'message': 'Forbidden: User failed test'})
+        return JsonResponse(data, status=403)
+
+    # permission check
+    user_perm_test = request.user.has_perm('app.add_budgetallocation')
+    if not user_perm_test:
+        data.update({'message': 'Forbidden: Permission denied'})
+        return JsonResponse(data, status=403)
+
+    # process
+    if request.is_ajax() and request.method == 'POST':
+        form = YearlyBudgetAllocationForm(data=request.POST)
+      
+        if form.is_valid():
+        
+            obj = form.save()
+            logger.debug(f'Yearly BudgetAllocation object created: {obj}')
+            status = 201  # created status
+            data = {'success': True,
+                    'message': f"[#{obj.id}] A budget allocation "
+                    f"record has been created."
+                }
+        else:
+            logger.error(f'Invalid form: {form.errors}')
+            status = 400
+            data = {'message': 'Invalid form', 'error': form.errors}
+    else:
+        logger.error(f'Invalid method: {request.method}')
+        status = 405  # invalid method
+        data.update({'message': 'Invalid method or not ajax request'})
+
+    return JsonResponse(data, status=status)
+
+
+# edit
+def ajax_yearly_budget_allocation_edit(request):
+    data = {'success': False, 'message': "Something went wrong"}
+
+    # user check
+    user_passes_test = test_user(request, test_for='is_staff')
+    if not user_passes_test:
+        data.update({'message': 'Forbidden: User failed test'})
+        return JsonResponse(data, status=403)
+
+    # permission check
+    user_perm_test = request.user.has_perm('app.change_budgetallocation')
+    if not user_perm_test:
+        data.update({'message': 'Forbidden: Permission denied'})
+        return JsonResponse(data, status=403)
+
+    # process
+    if request.is_ajax() and request.method == 'GET':
+        try:  # get the budget allocation id or pk
+            pk = int(request.GET.get('pk'))
+            obj = BudgetAllocation.objects.get(pk=pk)
+            form = YearlyBudgetAllocationForm(instance=obj)
+          
+            status = 200  # OK
+            data = {
+                'success': True,
+                'form': form,
+                'object': obj,
+                'message': f'Check form render for BudgetAllocation {obj.pk}'
+            }
+        except Exception as e:
+            logger.error(e)
+            status = 404  # pk or id not found
+            data.update({'message': 'Error: Could not get BudgetAllocation ID'})
+    else:
+        logger.error(f'Invalid method: {request.method}')
+        status = 405  # invalid method
+        data.update({'message': 'Invalid method or not ajax request'})
+
+    return render(request, 
+        'app/account/budgets/yearlyallocation/load_budget_allocation_fields.html',
+        data, status=status)
+
+# update
+def ajax_yearly_budget_allocation_update(request):
+    """AJAX view: budget allocation update """
+    logger.debug('GET budget_allocation_update')
+    data = {'success': False, 'message': "Something went wrong"}
+
+    # user check
+    user_passes_test = test_user(request, test_for='is_staff')
+    if not user_passes_test:
+        data.update({'message': 'Forbidden: User failed test'})
+        return JsonResponse(data, status=403)
+
+    # permission check
+    user_perm_test = request.user.has_perm('app.change_budgetallocation')
+    if not user_perm_test:
+        data.update({'message': 'Forbidden: Permission denied'})
+        return JsonResponse(data, status=403)
+
+
+    # process
+    if request.is_ajax() and request.method == 'POST':
+        logger.debug(f'POST Request: {request.POST}')
+        instance = BudgetAllocation.objects.get(pk=request.POST.get('pk'))
+
+        if instance:
+            form = BudgetAllocationForm(request.POST, instance=instance)
+            if form.is_valid():
+                obj = form.save()  # budget allocation created obj
+                logger.debug(f'Budget allocation: {obj}')
+                status = 200  # OK status
+                data = {'success': True,
+                        'message': f"The Budget allocation ({obj.id}) has "
+                                    f"been created."}
+            else:
+                logger.error(f'Invalid form: {form.errors}')
+                status = 400
+                data = {'message': 'Invalid form', 'error': form.errors}
+    else:
+        logger.error(f'Invalid method: {request.method}')
+        status = 405  # invalid method
+        data.update({'message': 'Invalid method or not ajax request'})
+
+    return JsonResponse(data, status=status)
