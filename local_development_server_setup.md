@@ -107,6 +107,7 @@
 	git config --global user.name "your-username"
 	git config --global user.email "your-email@com"
 	git config --global credential.helper cache 
+	git config --global --unset credential.helper
 
 	
 ## Postgresql 
