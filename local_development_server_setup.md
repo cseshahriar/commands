@@ -104,6 +104,9 @@
 ## Git
 
 	sudo apt-get install git
+	git config --global user.name "your-username"
+	git config --global user.email "your-email@com"
+	git config --global credential.helper cache 
 
 	
 ## Postgresql 
