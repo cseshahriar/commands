@@ -1,0 +1,57 @@
+#2 ORM best practices:
+Avoid N+1 queries 
+Use Select_related and prefetch_related 
+Databases are much faster than python loops. I.e .update(), filter(), .aggregate()
+Get only what you need - Values() and values_list()
+
+The values() method returns a QuerySet containing dictionaries:
+<QuerySet [{'comment_id': 1}, {'comment_id': 2}]>
+
+The values_list() method returns a QuerySet containing tuples:
+<QuerySet [(1,), (2,)]>
+If you are using values_list() with a single field, you can use flat=True to return a QuerySet of single values instead of 1-tuples:
+
+<QuerySet [1, 2]>
+distinct()
+distinct are used to eliminate the duplicate elements.
+
+ 
+# N + 1 Query Problem:
+The N + 1 problem is basically abusing the database with a large number of small queries instead of one or two large queries. 
+
+Example: 
+class Genre(models.Model):
+   name = models.CharField(max_length=100)
+   
+class Book(models.Model):
+   name = models.CharField(max_length=100)
+   genre = models.ForeignKey('Genre', on_delete=models.CASCADE)
+   authors = models.ManyToManyField('Hat', on_delete=models.CASCADE)
+   public_year = models.TextField()
+   
+class Author(models.Model):
+  name = models.CharField(max_length=100)
+  
+books = Books.objects.all() # return books qs with genge small queries for every single book
+
+for book in books:
+	print(book.name)
+	print(book.genre.name) # the problem is created here1
+	for author in books.authors.all():
+		print(author.name) # The problem is created here!
+
+# solution
+books = books.objects.select_related(‘genre’).prefetch_related(‘authors’) # return single qs
+
+for book in books:
+	print(book.name)
+	print(book.gene.name)
+	for author in books.authors.all():
+		print(author.name)
+
+
+select_related: works only with foreignkey and one to one relationship and creates complex queries for fetching the result set.
+
+prefetch_related:  works for only m2m
+
+# select_related and prefetch_related basically make join queries
